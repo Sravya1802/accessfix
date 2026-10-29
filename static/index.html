@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AccessFix: find, fix, and prove accessibility fixes</title>
+  <meta name="description" content="AccessFix finds accessibility bugs on any website, writes the fixes, re-tests them with axe-core, and retries the ones that fail.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111827'/%3E%3Cpath d='M9 17l5 5 9-11' fill='none' stroke='%2386efac' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js" defer></script>
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="/" aria-label="AccessFix home">
+        <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#111827"/><path d="M9 17l5 5 9-11" fill="none" stroke="#86efac" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>AccessFix</span>
+      </a>
+      <p class="mode-pill" id="mode-pill" hidden></p>
+      <nav aria-label="Project links">
+        <a href="https://github.com/Sravya1802/accessfix">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap">
+        <p class="eyebrow">Coding &amp; agentic engineering · NVIDIA Nemotron on Nebius Token Factory · Tavily</p>
+        <h1 id="hero-title">AccessFix finds accessibility bugs, fixes them, and <span class="hl">proves the fix</span>.</h1>
+        <p class="lede">Paste a URL. An AI agent scans the page with axe-core, writes patches, re-runs the checker on every one, and retries the ones that still fail.</p>
+
+        <form id="scan-form" class="scan-form" novalidate>
+          <label for="url-input">Website URL</label>
+          <div class="scan-row">
+            <input id="url-input" name="url" type="url" inputmode="url" autocomplete="url" spellcheck="false"
+                   aria-describedby="url-help url-error" required>
+            <button type="submit" class="btn btn-primary" id="scan-button">Scan &amp; Fix</button>
+          </div>
+          <p id="url-help" class="help">Public http or https pages only. Example: https://example.com</p>
+          <p id="url-error" class="form-error" role="alert"></p>
+          <div class="quick-actions">
+            <button type="button" class="btn btn-secondary" id="demo-button">Try the demo site</button>
+            <button type="button" class="btn btn-ghost" id="self-button">Scan AccessFix itself</button>
+            <a class="text-link" id="demo-link" href="/demo/sunny-crumb.html" target="_blank" rel="noopener">Open the demo site<span class="sr-only"> (opens in a new tab)</span> ↗</a>
+          </div>
+        </form>
+
+        <ol class="loop" aria-label="How the agent loop works">
+          <li><span class="badge badge-tavily">Tavily</span> Map pages</li>
+          <li><span class="badge badge-axe">axe-core</span> Scan</li>
+          <li><span class="badge badge-nano">Nano</span> Triage</li>
+          <li><span class="badge badge-tavily">Tavily</span> Research</li>
+          <li><span class="badge badge-super">Super</span> Write fixes</li>
+          <li><span class="badge badge-axe">axe-core</span> Verify</li>
+          <li><span class="badge badge-retry">Retry</span> Failures</li>
+          <li><span class="badge badge-ultra">Ultra</span> Report</li>
+        </ol>
+
+        <p class="stat">
+          <strong>95.9%</strong> of the top one million home pages had detectable WCAG failures in 2026, averaging
+          <strong>56.1</strong> errors per page (WebAIM Million). Six error types make up 96% of them, and AccessFix targets exactly those.
+        </p>
+      </div>
+    </section>
+
+    <section id="run" class="run" aria-labelledby="run-title" hidden>
+      <div class="wrap">
+        <div class="run-head">
+          <h2 id="run-title">Agent run</h2>
+          <p class="run-url" id="run-url"></p>
+        </div>
+        <div id="run-error" class="alert" role="alert" hidden></div>
+
+        <div class="run-grid">
+          <div class="card">
+            <h3 class="card-title">Live agent timeline</h3>
+            <ol id="timeline" class="timeline" aria-live="polite" aria-relevant="additions text"></ol>
+          </div>
+
+          <div class="card score-card" id="score-card">
+            <h3 class="card-title">AccessFix score</h3>
+            <div class="ring-wrap">
+              <svg class="ring" viewBox="0 0 120 120" role="img" aria-labelledby="ring-label">
+                <title id="ring-label">Score not available yet</title>
+                <circle class="ring-track" cx="60" cy="60" r="52"/>
+                <circle class="ring-value" id="ring-value" cx="60" cy="60" r="52"/>
+              </svg>
+              <div class="ring-text" aria-hidden="true">
+                <span id="ring-number">–</span>
+                <span class="ring-sub">/ 100</span>
+              </div>
+            </div>
+            <p class="score-line" id="score-line">Waiting for the first scan…</p>
+            <dl class="score-stats">
+              <div><dt>Issues</dt><dd id="stat-issues">–</dd></div>
+              <div><dt>Verified fixes</dt><dd id="stat-fixed">0</dd></div>
+              <div><dt>Need a human</dt><dd id="stat-human">–</dd></div>
+            </dl>
+            <p class="fineprint">AccessFix score: a quick indicator, not a compliance certificate.</p>
+          </div>
+        </div>
+
+        <div id="results" hidden>
+          <section class="card" aria-labelledby="shots-title">
+            <h3 class="card-title" id="shots-title">Before and after</h3>
+            <div class="shots" id="shots"></div>
+          </section>
+
+          <section class="card" aria-labelledby="fixes-title">
+            <div class="card-head">
+              <h3 class="card-title" id="fixes-title">Fixes</h3>
+              <div class="downloads">
+                <a class="btn btn-secondary btn-sm" id="dl-patch" href="#" download>Download patches (JSON)</a>
+                <a class="btn btn-secondary btn-sm" id="dl-report" href="#" download>Download report (Markdown)</a>
+              </div>
+            </div>
+            <p class="help">Every fix was applied to a fresh load of the page and re-checked with axe-core. Copy the "after" code into your source.</p>
+            <div id="fixes"></div>
+          </section>
+
+          <section class="card" aria-labelledby="human-title" id="human-section">
+            <h3 class="card-title" id="human-title">Needs a human</h3>
+            <ul id="human" class="human-list"></ul>
+          </section>
+
+          <section class="card report" aria-labelledby="report-title">
+            <h3 class="card-title" id="report-title">Report <span class="badge badge-ultra">Nemotron Ultra</span></h3>
+            <div id="report" class="prose"></div>
+          </section>
+
+          <section class="card" aria-labelledby="trace-title">
+            <h3 class="card-title" id="trace-title">Agent trace</h3>
+            <div class="table-wrap">
+              <table class="trace">
+                <caption>Nemotron calls on Nebius Token Factory</caption>
+                <thead><tr><th scope="col">Tier</th><th scope="col">Model</th><th scope="col">Purpose</th><th scope="col" class="num">Latency</th><th scope="col" class="num">Tokens in</th><th scope="col" class="num">Tokens out</th></tr></thead>
+                <tbody id="trace-body"></tbody>
+                <tfoot id="trace-foot"></tfoot>
+              </table>
+            </div>
+            <div class="table-wrap">
+              <table class="trace">
+                <caption>Tool calls (Tavily, axe-core, contrast tool)</caption>
+                <thead><tr><th scope="col">Tool</th><th scope="col">Detail</th><th scope="col" class="num">Latency</th><th scope="col">Note</th></tr></thead>
+                <tbody id="tools-body"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>Automated checks catch only part of WCAG. AccessFix fixes reduce risk but do not guarantee compliance. Alt text and labels the agent writes should be reviewed by a person.</p>
+      <p>MIT licensed. Uses <a href="https://github.com/dequelabs/axe-core">axe-core</a> (MPL-2.0). Built for the Nebius × NVIDIA Global AI Hackathon.</p>
+    </div>
+  </footer>
+  <p class="sr-only" id="sr-status" role="status" aria-live="polite"></p>
+</body>
+</html>

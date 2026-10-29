@@ -1,0 +1,126 @@
+<!doctype html>
+<!-- Sunny Crumb Bakery: a fictional site with deliberately planted accessibility errors for the AccessFix demo. -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sunny Crumb Bakery</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Helvetica Neue", Arial, sans-serif; background: #ffffff; color: #3b2a1a; }
+    a { color: #7a3e12; }
+    header { display: flex; align-items: center; gap: 24px; padding: 14px 40px; border-bottom: 1px solid #f1e4d0; }
+    header nav { display: flex; gap: 20px; flex: 1; }
+    header nav a { text-decoration: none; font-weight: 600; }
+    .search { display: flex; align-items: center; gap: 6px; border: 1px solid #e2cfb3; border-radius: 999px; padding: 6px 12px; }
+    .search input { border: 0; outline: none; width: 150px; font-size: 14px; }
+    .icon-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #e2cfb3; background: #fff; display: grid; place-items: center; cursor: pointer; }
+    .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center; padding: 48px 40px; background: #fffaf0; }
+    .hero img { width: 100%; border-radius: 18px; }
+    h1 { font-family: Georgia, serif; font-size: 46px; margin: 0 0 12px; color: #5a2d0c; }
+    .lede, .muted { color: #aaaaaa; }
+    .lede { font-size: 18px; line-height: 1.5; }
+    .cta { background: #ffffff; color: #f5c518; border: 2px solid #f5c518; border-radius: 999px; padding: 12px 26px; font-weight: 700; font-size: 16px; cursor: pointer; }
+    section { padding: 40px; }
+    h4 { font-family: Georgia, serif; font-size: 28px; margin: 0 0 18px; color: #5a2d0c; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .card { border: 1px solid #f1e4d0; border-radius: 16px; overflow: hidden; }
+    .card img { width: 100%; display: block; }
+    .card .body { padding: 14px 18px; }
+    .card h5 { margin: 0 0 6px; font-size: 18px; }
+    .card p { margin: 0; font-size: 14px; }
+    .price { font-weight: 700; color: #7a3e12; }
+    .order { display: flex; gap: 14px; align-items: center; }
+    select { padding: 10px; border-radius: 10px; border: 1px solid #e2cfb3; font-size: 15px; }
+    .visit { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+    iframe { width: 100%; height: 220px; border: 1px solid #f1e4d0; border-radius: 14px; }
+    .newsletter { background: #fffaf0; }
+    .newsletter form { display: flex; gap: 10px; }
+    .newsletter input { padding: 12px; border: 1px solid #e2cfb3; border-radius: 10px; width: 280px; font-size: 15px; }
+    footer { display: flex; align-items: center; gap: 14px; padding: 24px 40px; border-top: 1px solid #f1e4d0; }
+    footer .social { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: #fff3dc; }
+    footer p { margin: 0 0 0 auto; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/demo/sunny-crumb.html" class="logo"><img src="img/logo.svg" width="180" height="46"></a>
+    <nav>
+      <a href="#menu">Menu</a>
+      <a href="#order">Order</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <form class="search" role="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="#7a3e12" stroke-width="2"/><path d="M16.5 16.5L21 21" stroke="#7a3e12" stroke-width="2" stroke-linecap="round"/></svg>
+      <input type="search" id="site-search" name="q">
+    </form>
+    <button class="icon-btn" id="cart-button"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2" fill="none" stroke="#7a3e12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="20" r="1.5" fill="#7a3e12"/><circle cx="17" cy="20" r="1.5" fill="#7a3e12"/></svg></button>
+    <button class="icon-btn" id="menu-button"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="#7a3e12" stroke-width="2" stroke-linecap="round"/></svg></button>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <h1>Baked fresh every sunrise</h1>
+        <p class="lede">Small-batch breads, flaky pastries, and cinnamon rolls made by hand on Maple Lane since 2011. Order by 9 pm for pickup tomorrow morning.</p>
+        <button class="cta" id="hero-order">Order a box</button>
+      </div>
+      <img src="img/hero.svg" class="hero-img" width="640" height="360">
+    </div>
+
+    <section id="menu">
+      <h4>Today's bakes</h4>
+      <div class="grid">
+        <div class="card">
+          <img src="img/croissant.svg" width="240" height="160">
+          <div class="body"><h5>Butter croissant</h5><p class="muted">Laminated for three days, 81 flaky layers.</p><span class="price">$3.75</span></div>
+        </div>
+        <div class="card">
+          <img src="img/sourdough.svg" width="240" height="160">
+          <div class="body"><h5>Country sourdough</h5><p class="muted">Wild-yeast loaf with a blistered crust.</p><span class="price">$8.50</span></div>
+        </div>
+        <div class="card">
+          <img src="img/cinnamon-roll.svg" width="240" height="160">
+          <div class="body"><h5>Cinnamon roll</h5><p class="muted">Brown-butter swirl, cream cheese glaze.</p><span class="price">$4.25</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="order">
+      <h4>Build your box</h4>
+      <p class="muted">Pick a size and we'll fill it with today's favorites.</p>
+      <div class="order">
+        <select id="box-size" name="size">
+          <option>Half dozen ($21)</option>
+          <option>Baker's dozen ($42)</option>
+          <option>Party box, 24 pieces ($78)</option>
+        </select>
+        <button class="cta" id="add-to-cart">Add to cart</button>
+      </div>
+    </section>
+
+    <section id="visit" class="visit">
+      <div>
+        <h4>Find us</h4>
+        <p class="muted">12 Maple Lane, open Tuesday to Sunday, 7 am to 3 pm.</p>
+      </div>
+      <iframe srcdoc="<!doctype html><html lang='en'><body style='margin:0;font-family:Arial;background:#fbf3e4'><svg viewBox='0 0 400 220' width='100%' height='200' role='img' aria-label='Map of Maple Lane'><rect width='400' height='220' fill='#fbf3e4'/><path d='M0 120H400M180 0V220' stroke='#e2cfb3' stroke-width='18'/><circle cx='180' cy='120' r='12' fill='#d9534f'/></svg><p class='caption' style='color:#c9c9c9;margin:0 12px;font-size:12px'>Map data is illustrative</p></body></html>"></iframe>
+    </section>
+
+    <section class="newsletter">
+      <h4>Fresh-bake alerts</h4>
+      <p class="muted">Get an email the moment the sourdough comes out of the oven.</p>
+      <form onsubmit="return false">
+        <input type="email" id="newsletter-email" name="email">
+        <button class="cta" id="subscribe">Subscribe</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <a href="https://example.com/sunny-crumb/photos" class="social"><svg width="18" height="18" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="3" fill="none" stroke="#7a3e12" stroke-width="2"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="#7a3e12" stroke-width="2"/><path d="M8 6l1.5-2h5L16 6" fill="none" stroke="#7a3e12" stroke-width="2"/></svg></a>
+    <a href="mailto:hello@sunnycrumb.example" class="social"><svg width="18" height="18" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="#7a3e12" stroke-width="2"/><path d="M3 7l9 6 9-6" fill="none" stroke="#7a3e12" stroke-width="2"/></svg></a>
+    <p class="muted">© 2026 Sunny Crumb Bakery. A fictional bakery for the AccessFix demo.</p>
+  </footer>
+</body>
+</html>
